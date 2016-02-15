@@ -41,5 +41,10 @@ defmodule ExSlp do
 
   end
 
+  def close(%Handle{ handle: handle }) do
+    Nif.ex_slp_close(handle)
+    :ok
+  end
+
 end
 

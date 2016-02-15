@@ -21,6 +21,10 @@ defmodule ExSlp.Nif do
     raise "NIF slp_open/2 is not implemented"  
   end
 
+  def ex_slp_close(_) do
+    raise "NIF slp_close/1 is not implemented"
+  end
+
 end
 
 
