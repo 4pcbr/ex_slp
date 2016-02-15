@@ -1,3 +1,10 @@
+defmodule Mix.Tasks.Compile.ExSlp do
+  def run(_args) do
+    {result, _errcode} = System.cmd("make", [])
+    IO.binwrite(result)
+  end
+end
+
 defmodule ExSlp.Mixfile do
   use Mix.Project
 
@@ -7,7 +14,8 @@ defmodule ExSlp.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+     compilers: [:ex_slp] ++ Mix.compilers]
   end
 
   # Configuration for the OTP application

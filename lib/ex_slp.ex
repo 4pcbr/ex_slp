@@ -24,7 +24,19 @@ defmodule ExSlp do
   }
 
   def load_nifs do
-    :erlang.load_nif('./c_src/ex_slp', 0)
+    nif_path = case :code.priv_dir(:ex_slp) do
+      { :error, :bad_name } ->
+        case :filelib.is_dir(:filename.join(["..", :priv])) do
+          true ->
+            :filename.join(["..", :priv, :ex_slp])
+          _ ->
+            :filename.join([:priv, :ex_slp])
+        end
+      dir ->
+        :filename.join(dir, :ex_slp)
+    end
+
+    :erlang.load_nif(nif_path, 0)
   end
 
   def ex_slp_open(_, _) do
