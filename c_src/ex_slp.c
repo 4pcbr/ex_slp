@@ -59,5 +59,5 @@ static ErlNifFunc nif_funcs[] = {
   {"ex_slp_open", 2, ex_slp_open}
 };
 
-ERL_NIF_INIT(Elixir.ExSlp, nif_funcs, &load, NULL, NULL, NULL);
+ERL_NIF_INIT(Elixir.ExSlp.Nif, nif_funcs, &load, NULL, NULL, NULL);
 

@@ -1,5 +1,10 @@
+require ExSlp.Handle
+require ExSlp.Nif
+
 defmodule ExSlp do
-  @on_load :load_nifs
+
+  alias ExSlp.Handle
+  alias ExSlp.Nif
 
   @error_codes %{
      0  => :SLP_OK,
@@ -23,34 +28,14 @@ defmodule ExSlp do
     -26 => :SLP_TYPE_ERROR,
   }
 
-  def load_nifs do
-    nif_path = case :code.priv_dir(:ex_slp) do
-      { :error, :bad_name } ->
-        case :filelib.is_dir(:filename.join(["..", :priv])) do
-          true ->
-            :filename.join(["..", :priv, :ex_slp])
-          _ ->
-            :filename.join([:priv, :ex_slp])
-        end
-      dir ->
-        :filename.join(dir, :ex_slp)
-    end
-
-    :erlang.load_nif(nif_path, 0)
-  end
-
-  def ex_slp_open(_, _) do
-    raise "NIF slp_open/2 is not implemented"  
-  end
-
   def open(lang, async) do
-    { error_code, handle } = ex_slp_open(lang, case async do
+    { error_code, handle } = Nif.ex_slp_open(lang, case async do
       true  -> 1
       false -> 0
     end)
 
     case error_code do
-      0 -> { :ok, handle }
+      0 -> { :ok,    %Handle{ handle: handle } }
       _ -> { :error, Map.get(@error_codes, error_code) }
     end
 
